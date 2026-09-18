@@ -1,0 +1,26 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Items root entity'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define view entity zc_items_0414 as projection on ZI_ITEMS_0414
+{
+    key Id,
+    Name,
+    Description,
+    Releasedate,
+    Discontinueddate,
+    @Semantics.amount.currencyCode: 'Waers'
+    Price,
+    Waers,
+    @Semantics.quantity.unitOfMeasure: 'DimensionsUom'
+    Height,
+    @Semantics.quantity.unitOfMeasure: 'DimensionsUom'
+    Width,
+    @Semantics.quantity.unitOfMeasure: 'DimensionsUom'
+    Depth,
+    DimensionsUom,
+    Quantity,
+    Unitofmeasure,
+    /* Associations */
+    _Header: redirected to parent ZC_HEADER_0414
+}

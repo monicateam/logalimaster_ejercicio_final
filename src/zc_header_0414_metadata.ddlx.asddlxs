@@ -1,0 +1,97 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+    typeName: 'Sales order',
+    typeNamePlural: 'Sale order',
+    title: {
+        type: #STANDARD,
+        value: 'Id'
+    }
+}
+annotate entity ZC_HEADER_0414
+    with 
+{
+    @EndUserText.label: 'Sale order'
+  @UI.facet: [ {
+    label: 'Order header', 
+    id: 'GeneralInfo', 
+    purpose: #STANDARD, 
+    position: 10 , 
+    type: #IDENTIFICATION_REFERENCE
+  },
+  {  id: 'Items',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Items',
+      position: 20,
+      targetElement: '_Items' }
+  
+  ]
+//  @UI.lineItem: [
+//  { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Aceptar viaje' },
+//  { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'rechazar viaje' },
+//  { type: #FOR_ACTION, dataAction: 'createTravelByTemplate', label: 'crear viaje plantilla' },
+//  {
+//    position: 10 
+//  }
+//  ]
+  @UI.identification: [ {
+    position: 10 
+  } ]
+
+  @UI.selectionField: [ {
+    position: 10 
+  } ]
+  @UI.lineItem: [ {
+    position: 10 
+  } ]
+    Id;
+    @UI.identification: [ {
+    position: 20 
+  } ]
+  @UI.lineItem: [ {
+    position: 20 
+  } ]
+  @UI.selectionField: [ {
+    position: 20 
+  } ]
+    Email;
+    @UI.identification: [ {
+    position: 30 
+  } ]
+  @UI.lineItem: [ {
+    position: 30 
+  } ]
+  @UI.selectionField: [ {
+    position: 30 
+  } ]
+    CustomerFullName;
+    @UI.identification: [ {
+    position: 40 
+  } ]
+  @UI.lineItem: [ {
+    position: 40 
+  } ]
+    Country;
+    @UI.identification: [ {
+    position: 50 
+  } ]
+  @UI.lineItem: [ {
+    position: 50 
+  } ]
+    Createon;
+    @UI.identification: [ {
+    position: 60 
+  } ]
+  @UI.lineItem: [ {
+    position: 60 
+  } ]
+    Deliverydate;
+    @UI.identification: [ {
+    position: 70 
+  } ]
+  @UI.lineItem: [ {
+    position: 70 
+  } ]
+    Orderstatus;
+    
+}
