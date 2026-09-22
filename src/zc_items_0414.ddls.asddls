@@ -5,6 +5,7 @@
 define view entity zc_items_0414 as projection on ZI_ITEMS_0414
 {
     key Id,
+    key UUID,
     Name,
     Description,
     Releasedate,
@@ -21,6 +22,8 @@ define view entity zc_items_0414 as projection on ZI_ITEMS_0414
     DimensionsUom,
     Quantity,
     Unitofmeasure,
+    LastChangedAt,
+    LocalLastChangeAt,
     /* Associations */
     _Header: redirected to parent ZC_HEADER_0414
 }

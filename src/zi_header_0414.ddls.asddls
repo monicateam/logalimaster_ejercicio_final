@@ -15,5 +15,7 @@ define root view entity ZI_HEADER_0414 as select from zheader_0414
     deliverydate as Deliverydate,
     orderstatus as Orderstatus,
     imageurl as Imageurl,
+    last_change_at as LastChangedAt,
+    local_last_changed_at as LocalLastChangeAt,
     _Items
 }

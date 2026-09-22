@@ -16,6 +16,8 @@ define root view entity ZC_HEADER_0414
     Deliverydate,
     Orderstatus,
     Imageurl,
+    LastChangedAt,
+    LocalLastChangeAt,
     /* Associations */
     _Items: redirected to composition child zc_items_0414
 }

@@ -1,0 +1,77 @@
+managed;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_HEADER_0414 alias Header
+implementation in class zbp_i_header_0414 unique
+persistent table zheader_0414
+draft table zheader_0414_d
+lock master total etag LastChangedAt
+authorization master ( instance )
+etag master LocalLastChangeAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) LastChangedAt, LocalLastChangeAt;
+  field (mandatory) id, Email;
+
+  association _Items { create; }
+
+  draft action Resume;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft determine action Prepare;
+
+  mapping for zheader_0414
+    {
+      id                = id;
+      email             = email;
+      firstname         = firstname;
+      lastname          = lastname;
+      Country           = country;
+      Createon          = createon;
+      Deliverydate      = deliverydate;
+      Orderstatus       = orderstatus;
+      Imageurl          = imageurl;
+      LastChangedAt     = last_change_at;
+      LocalLastChangeAt = local_last_changed_at;
+    }
+}
+
+define behavior for ZI_ITEMS_0414 alias Items
+implementation in class zbp_i_items_0414 unique
+persistent table zitems_0414
+draft table zitems_0414_d
+lock dependent by _Header
+authorization dependent by _Header
+etag master LocalLastChangeAt
+{
+
+  update;
+  delete;
+  field ( readonly ) Id, LastChangedAt, LocalLastChangeAt;
+  field (mandatory) uuid;
+  association _Header { with draft; }
+
+  mapping for zitems_0414
+    {
+      Id                = id;
+      uuid              = item_uuid;
+      name              = name;
+      Description       = description;
+      Releasedate       = releasedate;
+      Discontinueddate  = discontinueddate;
+      Price             = price;
+      Waers             = waers;
+      Height            = height;
+      Width             = width;
+      Depth             = depth;
+      DimensionsUom     = dimensions_uom;
+      Quantity          = quantity;
+      Unitofmeasure     = unitofmeasure;
+      LastChangedAt     = last_change_at;
+      LocalLastChangeAt = local_last_changed_at;
+    }
+}

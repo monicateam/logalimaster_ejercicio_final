@@ -6,6 +6,7 @@ define view entity ZI_ITEMS_0414 as select from zitems_0414
     association to parent ZI_HEADER_0414 as _Header on $projection.Id = _Header.Id
 {
     key id as Id,
+    key item_uuid as UUID,
     name as Name,
     description as Description,
     releasedate as Releasedate,
@@ -22,5 +23,7 @@ define view entity ZI_ITEMS_0414 as select from zitems_0414
     dimensions_uom as DimensionsUom,
     quantity as Quantity,
     unitofmeasure as Unitofmeasure,
+    last_change_at as LastChangedAt,
+    local_last_changed_at as LocalLastChangeAt,
     _Header
 }
