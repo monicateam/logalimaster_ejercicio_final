@@ -3,13 +3,10 @@
 {
 "FROM":
 [
-"ZITEMS_0414"
+"ZORDSTATUS_0414"
 ],
 "ASSOCIATED":
-[
-"I_CURRENCY",
-"ZI_HEADER_0414"
-],
+[],
 "BASE":
 [],
 "ANNO_REF":

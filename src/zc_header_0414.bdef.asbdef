@@ -1,0 +1,27 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZC_HEADER_0414 alias Header
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Resume;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+
+  use association _Items { create; }
+}
+
+define behavior for zc_items_0414 alias Items
+{
+  use update;
+  use delete;
+
+  use association _Header { with draft; }
+}

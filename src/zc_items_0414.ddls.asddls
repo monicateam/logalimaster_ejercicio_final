@@ -12,6 +12,10 @@ define view entity zc_items_0414 as projection on ZI_ITEMS_0414
     Discontinueddate,
     @Semantics.amount.currencyCode: 'Waers'
     Price,
+    @Consumption.valueHelpDefinition: [{
+        entity: { name: 'I_Currency', element: 'Currency' },
+        useForValidation: true
+    }]
     Waers,
     @Semantics.quantity.unitOfMeasure: 'DimensionsUom'
     Height,
@@ -25,5 +29,6 @@ define view entity zc_items_0414 as projection on ZI_ITEMS_0414
     LastChangedAt,
     LocalLastChangeAt,
     /* Associations */
-    _Header: redirected to parent ZC_HEADER_0414
+    _Header: redirected to parent ZC_HEADER_0414,
+    _Currency
 }

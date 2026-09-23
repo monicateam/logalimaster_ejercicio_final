@@ -2,4 +2,6 @@
 define service ZSB_ORDERS_0414 {
   expose ZC_HEADER_0414;
   expose zc_items_0414;
+  expose ZC_ORDER_STATUS_0414;
+  expose I_Currency;
 }

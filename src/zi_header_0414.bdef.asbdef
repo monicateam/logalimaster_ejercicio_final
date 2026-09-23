@@ -13,8 +13,8 @@ etag master LocalLastChangeAt
   create ( authorization : global );
   update;
   delete;
-  field ( readonly ) LastChangedAt, LocalLastChangeAt;
   field (mandatory) id, Email;
+  field( features: instance ) Createon, Imageurl, LastChangedAt, LocalLastChangeAt;
 
   association _Items { create; }
 
@@ -23,6 +23,15 @@ etag master LocalLastChangeAt
   draft action Activate optimized;
   draft action Discard;
   draft determine action Prepare;
+
+  determination setLastChange on modify  { update; }
+
+  validation validateOrderStatus on save { create; field Orderstatus; }
+  determine action validateOrderStatusID  { validation validateOrderStatus; }
+
+  side effects {
+    determine action validateOrderStatusID executed on field Orderstatus affects messages;
+  }
 
   mapping for zheader_0414
     {
@@ -52,8 +61,15 @@ etag master LocalLastChangeAt
   update;
   delete;
   field ( readonly ) Id, LastChangedAt, LocalLastChangeAt;
-  field (mandatory) uuid;
+  field (mandatory) uuid, Name, Description;
   association _Header { with draft; }
+
+  validation validateName on save { create; field Name; }
+  determine action validateNameValue  { validation validateName; }
+
+  side effects {
+    determine action validateNameValue executed on field Name affects messages;
+  }
 
   mapping for zitems_0414
     {

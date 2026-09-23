@@ -14,10 +14,16 @@ define root view entity ZC_HEADER_0414
     Country,
     Createon,
     Deliverydate,
+    @ObjectModel.text.element: ['OrderStatusDescr']
+    @Consumption.valueHelpDefinition: [{
+        entity: { name: 'ZC_ORDER_STATUS_0414', element: 'Status' }
+    }]
     Orderstatus,
     Imageurl,
     LastChangedAt,
     LocalLastChangeAt,
+    _OrderStatus.Description as OrderStatusDescr,
     /* Associations */
-    _Items: redirected to composition child zc_items_0414
+    _Items: redirected to composition child zc_items_0414,
+    _OrderStatus
 }

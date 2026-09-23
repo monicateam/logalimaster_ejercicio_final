@@ -26,14 +26,6 @@ annotate entity ZC_HEADER_0414
       targetElement: '_Items' }
   
   ]
-//  @UI.lineItem: [
-//  { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Aceptar viaje' },
-//  { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'rechazar viaje' },
-//  { type: #FOR_ACTION, dataAction: 'createTravelByTemplate', label: 'crear viaje plantilla' },
-//  {
-//    position: 10 
-//  }
-//  ]
   @UI.identification: [ {
     position: 10 
   } ]
@@ -55,43 +47,51 @@ annotate entity ZC_HEADER_0414
     position: 20 
   } ]
     Email;
-    @UI.identification: [ {
-    position: 30 
-  } ]
   @UI.lineItem: [ {
-    position: 30 
-  } ]
-  @UI.selectionField: [ {
-    position: 30 
+    position: 30 , label: 'Customer'
   } ]
     CustomerFullName;
+    
+    @UI.identification: [ {
+    position: 30 
+  } ]
+    Firstname;
     @UI.identification: [ {
     position: 40 
+  } ]
+    Lastname;
+    
+    @UI.identification: [ {
+    position: 50 
   } ]
   @UI.lineItem: [ {
     position: 40 
   } ]
     Country;
     @UI.identification: [ {
-    position: 50 
+    position: 60
   } ]
   @UI.lineItem: [ {
-    position: 50 
+    position: 50
   } ]
     Createon;
     @UI.identification: [ {
-    position: 60 
+    position: 70
   } ]
   @UI.lineItem: [ {
     position: 60 
   } ]
     Deliverydate;
     @UI.identification: [ {
-    position: 70 
+    position: 80 
   } ]
   @UI.lineItem: [ {
     position: 70 
   } ]
     Orderstatus;
+    @UI.identification: [ {
+    position: 90 
+  } ]
+    Imageurl;
     
 }

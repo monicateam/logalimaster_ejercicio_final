@@ -4,6 +4,7 @@
 @Metadata.ignorePropagatedAnnotations: true
 define root view entity ZI_HEADER_0414 as select from zheader_0414
     composition [0..*] of ZI_ITEMS_0414 as _Items
+    association [0..1] to ZC_ORDER_STATUS_0414 as _OrderStatus on $projection.Orderstatus = _OrderStatus.Status
 {
     key id as Id,
     email as Email,
@@ -17,5 +18,6 @@ define root view entity ZI_HEADER_0414 as select from zheader_0414
     imageurl as Imageurl,
     last_change_at as LastChangedAt,
     local_last_changed_at as LocalLastChangeAt,
-    _Items
+    _Items,
+    _OrderStatus
 }
