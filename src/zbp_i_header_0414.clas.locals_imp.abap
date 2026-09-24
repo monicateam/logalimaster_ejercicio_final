@@ -1,4 +1,7 @@
 CLASS lhc_Header DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PUBLIC SECTION.
+    CLASS-DATA:
+      already_saved TYPE abap_boolean.
   PRIVATE SECTION.
 
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
@@ -8,12 +11,12 @@ CLASS lhc_Header DEFINITION INHERITING FROM cl_abap_behavior_handler.
       REQUEST requested_authorizations FOR Header RESULT result.
 
     METHODS get_features FOR INSTANCE FEATURES
-        IMPORTING keys REQUEST requested_features for Header RESULT result.
+      IMPORTING keys REQUEST requested_features FOR Header RESULT result.
 
     METHODS validateorderstatus FOR VALIDATE ON SAVE
-      keys FOR header~validateorderstatus.
-    METHODS setlastchange FOR DETERMINE ON MODIFY
-      keys FOR header~setlastchange.
+       keys FOR header~validateorderstatus.
+    METHODS setlastchange FOR DETERMINE ON SAVE
+       keys FOR header~setlastchange.
 ENDCLASS.
 
 CLASS lhc_Header IMPLEMENTATION.
@@ -32,46 +35,85 @@ CLASS lhc_Header IMPLEMENTATION.
         RESULT DATA(lt_headers)
         FAILED failed.
 
-     LOOP AT lt_headers INTO DATA(ls_header).
-        SELECT SINGLE id
-            FROM zc_header_0414
-            WHERE Id EQ @ls_header-Id
-            INTO @data(lv_dummy_id).
-        result = VALUE #( BASE result (
-            %tky = ls_header-%tky
-            %field-Imageurl = COND #( WHEN lv_dummy_id IS INITIAL
-                                        THEN if_abap_behv=>fc-f-unrestricted
-                                        ELSE if_abap_behv=>fc-f-read_only
-                              )
-           %field-Createon = COND #( WHEN lv_dummy_id IS INITIAL
-                                        THEN if_abap_behv=>fc-f-unrestricted
-                                        ELSE if_abap_behv=>fc-f-read_only
-                              )
-           %field-LastChangedAt = if_abap_behv=>fc-f-read_only
-           %field-LocalLastChangeAt = if_abap_behv=>fc-f-read_only
-        ) ).
-        CLEAR: lv_dummy_id.
-     ENDLOOP.
+    LOOP AT lt_headers INTO DATA(ls_header).
+      SELECT SINGLE id
+          FROM zc_header_0414
+          WHERE Id EQ @ls_header-Id
+          INTO @DATA(lv_dummy_id).
+      result = VALUE #( BASE result (
+          %tky = ls_header-%tky
+          %field-Imageurl = COND #( WHEN lv_dummy_id IS INITIAL
+                                      THEN if_abap_behv=>fc-f-unrestricted
+                                      ELSE if_abap_behv=>fc-f-read_only
+                            )
+         %field-Createon = COND #( WHEN lv_dummy_id IS INITIAL
+                                      THEN if_abap_behv=>fc-f-unrestricted
+                                      ELSE if_abap_behv=>fc-f-read_only
+                            )
+         %field-LastChangedAt = if_abap_behv=>fc-f-read_only
+         %field-LocalLastChangeAt = if_abap_behv=>fc-f-read_only
+      ) ).
+      CLEAR: lv_dummy_id.
+    ENDLOOP.
 
   ENDMETHOD.
 
   METHOD validateOrderStatus.
-  ENDMETHOD.
-
-  METHOD setLastChange.
     READ ENTITIES OF zi_header_0414 IN LOCAL MODE
-        ENTITY Header
-        FIELDS ( LastChangedAt )
-        WITH CORRESPONDING #(  keys )
-        RESULT DATA(lt_headers).
+          ENTITY Header
+          FIELDS ( Orderstatus )
+          WITH CORRESPONDING #(  keys )
+          RESULT DATA(lt_headers)
+          FAILED DATA(lt_read_failed).
 
-     MODIFY ENTITIES OF zi_header_0414 IN LOCAL MODE
-        ENTITY header
-        UPDATE FIELDS (  LastChangedAt )
-        WITH VALUE #(  FOR ls_header IN lt_headers (
-            %tky = ls_header-%tky
-            LastChangedAt = |{ cl_abap_context_info=>get_system_date( ) }|
-        ) ).
+    failed = corresponding #(  DEEP Lt_read_failed ).
+
+    LOOP AT lt_headers INTO DATA(ls_header).
+        SELECT SINGLE status
+        FROM zordstatus_0414
+        WHERE status EQ @ls_header-Orderstatus
+        INTO @DATA(lv_status)
+        PRIVILEGED ACCESS.
+
+        APPEND VALUE #( %tky = ls_header-%tky
+            %state_area = 'VALIDATE_ORDER_STATUS'
+        ) TO reported-header.
+
+        IF lv_status IS INITIAL.
+            APPEND VALUE #( %tky = ls_header-%tky ) TO failed-header.
+
+            APPEND VALUE #( %tky = ls_header-%tky
+                %state_area = 'VALIDATE_ORDER_STATUS'
+                %msg = me->new_message_with_text(
+                    severity = if_abap_behv_message=>severity-error
+                    text = |The order status { ls_header-Orderstatus } does not exist|
+                )
+                %element-orderstatus = if_abap_behv=>mk-on
+            ) TO reported-header.
+        ENDIF.
+
+    ENDLOOP.
+
+
+
+  ENDMETHOD.
+  METHOD setLastChange.
+    IF lhc_Header=>already_saved EQ abap_false.
+      lhc_Header=>already_saved = abap_true.
+      READ ENTITIES OF zi_header_0414 IN LOCAL MODE
+          ENTITY Header
+          FIELDS ( Id LastChangedAt )
+          WITH CORRESPONDING #(  keys )
+          RESULT DATA(lt_headers).
+
+      MODIFY ENTITIES OF zi_header_0414 IN LOCAL MODE
+         ENTITY header
+         UPDATE FIELDS (  LastChangedAt )
+         WITH VALUE #(  FOR ls_header IN lt_headers (
+             %tky = ls_header-%tky
+             LastChangedAt = |{ cl_abap_context_info=>get_system_date( ) }|
+         ) ).
+    ENDIF.
   ENDMETHOD.
 
 ENDCLASS.

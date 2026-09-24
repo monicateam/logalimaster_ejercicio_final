@@ -24,7 +24,7 @@ etag master LocalLastChangeAt
   draft action Discard;
   draft determine action Prepare;
 
-  determination setLastChange on modify  { update; }
+  determination setLastChange on save  { create; update; }
 
   validation validateOrderStatus on save { create; field Orderstatus; }
   determine action validateOrderStatusID  { validation validateOrderStatus; }
@@ -67,8 +67,12 @@ etag master LocalLastChangeAt
   validation validateName on save { create; field Name; }
   determine action validateNameValue  { validation validateName; }
 
+  validation validateDescription on save { create; field Description; }
+  determine action validateDescriptionValue  { validation validateDescription; }
+
   side effects {
     determine action validateNameValue executed on field Name affects messages;
+    determine action validateDescriptionValue executed on field Description affects messages;
   }
 
   mapping for zitems_0414
