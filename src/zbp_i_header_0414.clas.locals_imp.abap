@@ -17,6 +17,8 @@ CLASS lhc_Header DEFINITION INHERITING FROM cl_abap_behavior_handler.
        keys FOR header~validateorderstatus.
     METHODS setlastchange FOR DETERMINE ON SAVE
        keys FOR header~setlastchange.
+    METHODS validateorderemail FOR VALIDATE ON SAVE
+      keys FOR header~validateorderemail.
 ENDCLASS.
 
 CLASS lhc_Header IMPLEMENTATION.
@@ -114,6 +116,37 @@ CLASS lhc_Header IMPLEMENTATION.
              LastChangedAt = |{ cl_abap_context_info=>get_system_date( ) }|
          ) ).
     ENDIF.
+  ENDMETHOD.
+
+  METHOD validateOrderEmail.
+    READ ENTITIES OF zi_header_0414 IN LOCAL MODE
+          ENTITY Header
+          FIELDS ( Email )
+          WITH CORRESPONDING #(  keys )
+          RESULT DATA(lt_headers)
+          FAILED DATA(lt_read_failed).
+
+    failed = corresponding #(  DEEP Lt_read_failed ).
+
+    LOOP AT lt_headers INTO DATA(ls_header).
+        APPEND VALUE #( %tky = ls_header-%tky
+            %state_area = 'VALIDATE_ORDER_EMAIL'
+        ) TO reported-header.
+
+        IF ls_header-Email IS INITIAL.
+            APPEND VALUE #( %tky = ls_header-%tky ) TO failed-header.
+
+            APPEND VALUE #( %tky = ls_header-%tky
+                %state_area = 'VALIDATE_ORDER_EMAIL'
+                %msg = me->new_message_with_text(
+                    severity = if_abap_behv_message=>severity-error
+                    text = |The order email must not be empty|
+                )
+                %element-orderstatus = if_abap_behv=>mk-on
+            ) TO reported-header.
+        ENDIF.
+
+    ENDLOOP.
   ENDMETHOD.
 
 ENDCLASS.

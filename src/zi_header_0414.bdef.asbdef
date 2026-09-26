@@ -26,11 +26,14 @@ etag master LocalLastChangeAt
 
   determination setLastChange on save  { create; update; }
 
+  validation validateOrderEmail on save { create; field Email; }
+  determine action validateOrderEmailValue  { validation validateOrderEmail; }
   validation validateOrderStatus on save { create; field Orderstatus; }
   determine action validateOrderStatusID  { validation validateOrderStatus; }
 
   side effects {
     determine action validateOrderStatusID executed on field Orderstatus affects messages;
+    determine action validateOrderEmailValue executed on field Email affects messages;
   }
 
   mapping for zheader_0414
